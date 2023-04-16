@@ -1,4 +1,7 @@
 {
+    "builds": [
+        { "src": "/api/index.py", "use": "@now/python" }
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
