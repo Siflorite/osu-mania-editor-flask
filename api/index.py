@@ -4,13 +4,11 @@ import os
 import time
 from contextlib import closing
 
-import osuFunc
 import malodyFunc
 import miscFunc
 
 mcz_file = ""
 osz_file = ""
-PicArr = []
 
 app = Flask(__name__)
 
@@ -33,36 +31,14 @@ def convert():
     # 如果url为空，返回错误信息
     else:
         return '请提供一个有效的.mcz文件的下载链接'
-
-@app.route('/preview/osz', methods = ['GET'])
-def osuPreview():
-    url = request.args.get('url')
-    if url:
-        global osz_file
-        global PicArr
-        osz_file = download_file(url)
-        typeName, osuFiles, basePath = osuFunc.loadOsuOrOszFile(osz_file)
-        PicArr = []
-        for item in osuFiles:
-            newPic = osuFunc.generatePreviewPic(basePath, item)
-            PicArr.append(newPic)
-        osuFunc.cleanTempOsuFile(osz_file, "", False)
-        return send_file(PicArr[0])
-    else:
-        return '请提供一个有效的.osz文件的下载链接'
-
+    
 @app.after_request
 def delete_files(response):
     global mcz_file
     global osz_file
-    global PicArr
     if request.endpoint == "convert":
         os.remove(mcz_file)
         os.remove(osz_file)
-    elif request.endpoint == "osuPreview":
-        os.remove(osz_file)
-        for item in PicArr:
-            os.remove(item)
     
 def download_file(url, filename = None):
     start_time = time.time()  # 文件开始下载时的时间
