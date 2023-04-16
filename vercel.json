@@ -1,12 +1,8 @@
 {
-    "routes": [
+    "rewrites": [
         {
-        "src": "/",
-        "headers": {
-            "cache-control": "no-cache, no-store, must-revalidate",
-            "Access-Control-Allow-Origin": "*"
-        },
-        "dest": "/api"
+            "source": "/api/(.*)",
+            "destination": "/api/index.py"
         }
     ]
 }
