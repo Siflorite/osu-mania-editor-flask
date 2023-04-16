@@ -4,8 +4,8 @@ import os
 import time
 from contextlib import closing
 
-from .malodyFunc import convertMcOrMczFile
-from .miscFunc import convertIllegalCharacters
+from malodyFunc import convertMcOrMczFile
+from miscFunc import convertIllegalCharacters
 
 mcz_file = ""
 osz_file = ""
