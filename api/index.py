@@ -4,8 +4,8 @@ import os
 import time
 from contextlib import closing
 
-import .malodyFunc
-import .miscFunc
+from .malodyFunc import convertMcOrMczFile
+from .miscFunc import convertIllegalCharacters
 
 mcz_file = ""
 osz_file = ""
@@ -28,7 +28,7 @@ def convert():
         # 例如：import requests; requests.get(url).content
         mcz_file = download_file(url)
         # 调用已经设计好的函数convert，传入文件名，得到返回值
-        osz_file = malodyFunc.convertMcOrMczFile(mcz_file)[1]
+        osz_file = convertMcOrMczFile(mcz_file)[1]
         # 返回.osz文件的下载链接，使用send_file函数
         return send_from_directory(os.path.dirname(osz_file), os.path.split(osz_file)[-1])
     # 如果url为空，返回错误信息
@@ -38,7 +38,7 @@ def convert():
 def download_file(url, filename = None):
     start_time = time.time()  # 文件开始下载时的时间
     if not filename:
-        filename = os.path.abspath(miscFunc.convertIllegalCharacters(os.path.basename(url)))
+        filename = os.path.abspath(convertIllegalCharacters(os.path.basename(url))
     with closing(requests.get(url, stream=True, allow_redirects=True)) as response:
         chunk_size = 1024  # 单次请求最大值
         content_size = int(response.headers['content-length'])  # 内容体总大小
