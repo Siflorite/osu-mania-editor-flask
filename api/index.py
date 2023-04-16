@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file
+from flask import Flask, request, send_from_directory
 import requests
 import os
 import time
@@ -9,12 +9,9 @@ import miscFunc
 
 mcz_file = ""
 osz_file = ""
+PicArr = []
 
 app = Flask(__name__)
-
-@app.route('/')
-def hello_world():
-    return 'Hello,world'
 
 @app.route('/convert', methods = ['GET'])
 def convert():
@@ -24,6 +21,8 @@ def convert():
     if url:
         global mcz_file
         global osz_file
+        if os.path.exists(mcz_file): os.remove(mcz_file)
+        if os.path.exists(osz_file): os.remove(osz_file)
         # 下载.mcz文件到本地，假设文件名为mcz_file.mcz
         # 这里可以使用requests模块或者其他方法
         # 例如：import requests; requests.get(url).content
@@ -31,18 +30,10 @@ def convert():
         # 调用已经设计好的函数convert，传入文件名，得到返回值
         osz_file = malodyFunc.convertMcOrMczFile(mcz_file)[1]
         # 返回.osz文件的下载链接，使用send_file函数
-        return send_file(osz_file, as_attachment=True)
+        return send_from_directory(os.path.dirname(osz_file), os.path.split(osz_file)[-1])
     # 如果url为空，返回错误信息
     else:
         return '请提供一个有效的.mcz文件的下载链接'
-    
-@app.after_request
-def delete_files(response):
-    global mcz_file
-    global osz_file
-    if request.endpoint == "convert":
-        os.remove(mcz_file)
-        os.remove(osz_file)
     
 def download_file(url, filename = None):
     start_time = time.time()  # 文件开始下载时的时间
@@ -63,4 +54,4 @@ def download_file(url, filename = None):
     return filename
 
 if __name__=="__main__":
-    app.run(host='0.0.0.0', port=9000)
+    app.run()
