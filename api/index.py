@@ -38,7 +38,7 @@ def convert():
 def download_file(url, filename = None):
     start_time = time.time()  # 文件开始下载时的时间
     if not filename:
-        filename = os.path.abspath(convertIllegalCharacters(os.path.basename(url))
+        filename = os.path.abspath(convertIllegalCharacters(os.path.basename(url)))
     with closing(requests.get(url, stream=True)) as response:
         chunk_size = 1024  # 单次请求最大值
         content_size = int(response.headers['content-length'])  # 内容体总大小
