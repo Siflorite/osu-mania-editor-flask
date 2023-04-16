@@ -4,8 +4,8 @@ import os
 import time
 from contextlib import closing
 
-import malodyFunc
-import miscFunc
+import .malodyFunc
+import .miscFunc
 
 mcz_file = ""
 osz_file = ""
