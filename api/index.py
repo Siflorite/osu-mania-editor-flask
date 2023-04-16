@@ -12,6 +12,10 @@ osz_file = ""
 
 app = Flask(__name__)
 
+@app.route('/')
+def hello_world():
+    return 'Hello,world'
+
 @app.route('/convert', methods = ['GET'])
 def convert():
     # 获取请求参数中的url
